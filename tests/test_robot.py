@@ -45,7 +45,8 @@ def test_register_handlers():  # noqa: C901
     robot = WeRoBot(enable_session=False)
 
     for type in robot.message_types:
-        assert hasattr(robot, type) or hasattr(robot, type.replace('_event', ''))
+        assert hasattr(robot,
+                       type) or hasattr(robot, type.replace('_event', ''))
 
     @robot.text
     def text_handler():
@@ -79,7 +80,9 @@ def test_register_handlers():  # noqa: C901
         pass
 
     assert robot._handlers["shortvideo"] == [(shortvideo_handler, 0)]
-    assert robot.get_handlers("shortvideo") == [(shortvideo_handler, 0), (handler, 2)]
+    assert robot.get_handlers("shortvideo") == [
+        (shortvideo_handler, 0), (handler, 2)
+    ]
 
     @robot.location
     def location_handler():
@@ -133,13 +136,17 @@ def test_register_handlers():  # noqa: C901
     def scancode_push_handler():
         pass
 
-    assert robot._handlers["scancode_push_event"] == [(scancode_push_handler, 0)]
+    assert robot._handlers["scancode_push_event"] == [
+        (scancode_push_handler, 0)
+    ]
 
     @robot.scancode_waitmsg
     def scancode_waitmsg_handler():
         pass
 
-    assert robot._handlers["scancode_waitmsg_event"] == [(scancode_waitmsg_handler, 0)]
+    assert robot._handlers["scancode_waitmsg_event"] == [
+        (scancode_waitmsg_handler, 0)
+    ]
 
 
 def test_filter():
@@ -197,7 +204,8 @@ def test_filter():
     assert tester.send_xml(_make_xml("帮助"))._args['content'] == u"就不帮"
     assert tester.send_xml(_make_xml("跪求帮助"))._args['content'] == u"就不帮"
     assert tester.send_xml(_make_xml("ooohelp"))._args['content'] == u"就不帮"
-    assert tester.send_xml(_make_xml("小姐姐help"))._args['content'] == u"本小姐就帮你一下"
+    assert tester.send_xml(_make_xml("小姐姐help")
+                           )._args['content'] == u"本小姐就帮你一下"
 
 
 def test_register_not_callable_object():
@@ -218,13 +226,8 @@ def test_error_page():
 
 def test_config_ignore():
     from werobot.config import Config
-    config = Config(
-        TOKEN="token from config"
-    )
-    robot = WeRoBot(
-        config=config,
-        token="token2333"
-    )
+    config = Config(TOKEN="token from config")
+    robot = WeRoBot(config=config, token="token2333")
     assert robot.token == "token from config"
 
 
